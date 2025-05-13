@@ -341,7 +341,7 @@
                         lastPoseClass = currentPose;
                     } else if (lastPoseClass !== currentPose) {
                         const timeDiff = (Date.now() - poseStartTime) / 1000;
-                        if (timeDiff <= 2.0) { // 2초 이내에 다른 자세로 변경
+                        if (timeDiff <= 2.5) {
                             counter++;
                             document.getElementById("counter").textContent = "카운트: " + counter;
                         }
@@ -349,9 +349,13 @@
                         lastPoseClass = currentPose;
                     }
                 } else {
-                    isRunning = false;
-                    lastPoseClass = null;
-                    poseStartTime = null;
+                    if (isRunning) {
+                        setTimeout(() => {
+                            isRunning = false;
+                            lastPoseClass = null;
+                            poseStartTime = null;
+                        }, 500);
+                    }
                 }
             }
 
