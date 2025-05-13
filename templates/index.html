@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>달리기 자세 카운터</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -82,10 +83,10 @@
         }
         #label-container {
             margin-top: 20px;
-            font-size: 16px;
+            font-size: 20px;
         }
         .status {
-            font-size: 24px;
+            font-size: 32px;
             color: #666;
             margin: 10px 0;
         }
@@ -104,7 +105,7 @@
             transition: width 0.3s ease;
         }
         .pose-detected {
-            font-size: 24px;
+            font-size: 28px;
             color: #2ecc71;
             font-weight: bold;
             margin: 10px 0;
@@ -197,6 +198,7 @@
             canvas.height = size;
             ctx = canvas.getContext("2d");
             labelContainer = document.getElementById("label-container");
+            labelContainer.innerHTML = "";
             for (let i = 0; i < maxPredictions; i++) {
                 labelContainer.appendChild(document.createElement("div"));
             }
@@ -232,15 +234,14 @@
             document.getElementById("label-container").innerHTML = debugInfo;
 
             // 캘리브레이션 체크 (차렷 자세)
-            if (!calibrationComplete) {
-                for (let i = 0; i < maxPredictions; i++) {
-                    if (prediction[i].className === "Class 20") {
-                        charyeotIndex = i;
-                        break;
-                    }
+            for (let i = 0; i < maxPredictions; i++) {
+                if (prediction[i].className === "Class 24") {
+                    charyeotIndex = i;
+                    break;
                 }
-                let charyeotProb = charyeotIndex >= 0 ? prediction[charyeotIndex].probability : 0;
-                
+            }
+            let charyeotProb = charyeotIndex >= 0 ? prediction[charyeotIndex].probability : 0;
+            if (!calibrationComplete) {
                 if (charyeotProb > 0.5) {
                     document.getElementById("poseDetected").textContent = `차렷 자세 감지됨! (${(charyeotProb * 100).toFixed(1)}%)`;
                     if (calibrationStartTime === null) {
